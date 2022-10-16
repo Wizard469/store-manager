@@ -1,6 +1,6 @@
 const connection = require('./connection');
 
-const productsModel = {
+const productsModels = {
   getAll: async () => {
     const [result] = await connection.execute(
       'SELECT * FROM StoreManager.products',
@@ -16,4 +16,4 @@ const productsModel = {
   },
 };
 
-module.exports = productsModel;
+module.exports = productsModels;

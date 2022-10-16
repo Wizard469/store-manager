@@ -1,7 +1,7 @@
-const productsService = require('../services/products.service');
+const productsService = require('../services/products.services');
 const errorsMap = require('../helpers/errorsMap');
 
-const productsController = {
+const productsControllers = {
   getAll: async (_req, res) => {
     const { message } = await productsService.getAll();
     res.status(200).json(message);
@@ -16,4 +16,4 @@ const productsController = {
   },
 };
 
-module.exports = productsController;
+module.exports = productsControllers;

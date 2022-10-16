@@ -1,7 +1,7 @@
 const { validateId } = require('../middlewares/validations/validateInput');
-const productsModel = require('../models/products.model');
+const productsModel = require('../models/products.models');
 
-const productsService = {
+const productsServices = {
   getAll: async () => {
     const result = await productsModel.getAll();
     return { type: null, message: result };
@@ -13,9 +13,8 @@ const productsService = {
 
     const result = await productsModel.getById(id);
     if (!result) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
-    console.log(result);
     return { type: null, message: result };
   },
 };
 
-module.exports = productsService;
+module.exports = productsServices;
