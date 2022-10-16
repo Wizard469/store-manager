@@ -7,7 +7,7 @@ chai.use(sinonChai);
 chai.use(chaiHttp);
 const app = require("../../../src/app");
 const connection = require("../../../src/models/connection");
-const { productsMock } = require("../mocks/products.mocks");
+const { productsMock, newProduct } = require("../mocks/products.mocks");
 
 describe("Testing the Services of products", function () {
   afterEach(sinon.restore);
@@ -37,5 +37,21 @@ describe("Testing the Services of products", function () {
 
     expect(response.status).to.be.equal(404);
     expect(response.body).to.be.deep.equal({ message: 'Product not found' });
+  });
+
+  it('Should return the new product when a name is passed (Controller)', async function () {
+    sinon.stub(connection, 'execute')
+      .onFirstCall()
+      .resolves([{ insertId: 4 }])
+      .onSecondCall()
+      .resolves([[newProduct]]);
+
+    const response = await chai
+      .request(app)
+      .post('/products')
+      .send({ name: 'New Product' });
+
+    expect(response.status).to.be.equal(201);
+    expect(response.body).to.deep.equal(newProduct);
   });
 });

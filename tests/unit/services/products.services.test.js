@@ -3,7 +3,7 @@ const { expect } = require("chai");
 
 const productsServices = require("../../../src/services/products.services");
 const productsModels = require("../../../src/models/products.models");
-const { productsMock } = require("../mocks/products.mocks");
+const { productsMock, newProduct } = require("../mocks/products.mocks");
 
 describe("Testing the Services of products", function () {
   afterEach(sinon.restore);
@@ -12,27 +12,28 @@ describe("Testing the Services of products", function () {
     sinon.stub(productsModels, "getAll").resolves(productsMock);
     const result = await productsServices.getAll();
 
-    expect(result).to.deep.equal({ type: null, message: productsMock })
+    expect(result).to.deep.equal(productsMock);
   });
 
   it("should get products by id (Service)", async function () {
     sinon.stub(productsModels, "getById").resolves(productsMock[0]);
     const result = await productsServices.getById(1);
 
-    expect(result).to.deep.equal({ type: null, message: productsMock[0] })
+    expect(result).to.deep.equal(productsMock[0]);
   });
 
-  it("should get an error if the id is invalid", async function () {
-    sinon.stub(productsModels, "getById").resolves(undefined);
-    const result = await productsServices.getById(-5);
-
-    expect(result).to.deep.equal({ type: "INVALID_ID", message: "Invalid id" });
-  });
-
-  it("should get an error if the id does not exist", async function () {
+  it("should return null, if the id does not exist (Service)", async function () {
     sinon.stub(productsModels, "getById").resolves(undefined);
     const result = await productsServices.getById(9);
 
-    expect(result).to.deep.equal({ type: "PRODUCT_NOT_FOUND", message: "Product not found" });
+    expect(result).to.deep.equal(false);
+  });
+
+  it('Should create a new product (Service)', async function () {
+    sinon.stub(productsModels, 'addProduct').resolves(newProduct);
+
+    const result = await productsServices.addProduct('New Product');
+
+    expect(result).to.deep.equal(newProduct);
   });
 });

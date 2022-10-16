@@ -1,18 +1,25 @@
 const productsService = require('../services/products.services');
-const errorsMap = require('../helpers/errorsMap');
 
 const productsControllers = {
   getAll: async (_req, res) => {
-    const { message } = await productsService.getAll();
-    res.status(200).json(message);
+    const result = await productsService.getAll();
+    res.status(200).json(result);
   },
 
   getById: async (req, res) => {
     const { id } = req.params;
-    const { type, message } = await productsService.getById(id);
+    const result = await productsService.getById(id);
 
-    if (type) return res.status(errorsMap(type)).json({ message });
-    return res.status(200).json(message);
+    if (result) return res.status(200).json(result);
+
+    res.status(404).json({ message: 'Product not found' });
+  },
+
+  addProduct: async (req, res) => {
+    const { name } = req.body;
+    const result = await productsService.addProduct(name);
+
+    res.status(201).json(result);
   },
 };
 

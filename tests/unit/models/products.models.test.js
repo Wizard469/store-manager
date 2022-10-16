@@ -3,7 +3,7 @@ const { expect } = require("chai");
 
 const productsModels = require("../../../src/models/products.models");
 const connection = require("../../../src/models/connection");
-const { productsMock } = require("../mocks/products.mocks");
+const { productsMock, newProduct } = require("../mocks/products.mocks");
 
 describe("Testing the Models of products", function () {
   afterEach(sinon.restore);
@@ -20,5 +20,18 @@ describe("Testing the Models of products", function () {
     const result = await productsModels.getById(1);
 
     expect(result).to.deep.equal(productsMock[0]);
+  });
+
+  it('Should return the id of the new product (Model)', async function () {
+    sinon.stub(connection, 'execute')
+      .onFirstCall()
+      .resolves([{ insertId: 4 }])
+      .onSecondCall()
+      .resolves(newProduct);
+
+    sinon.stub(productsModels, 'getById').resolves(newProduct);
+
+    const result = await productsModels.addProduct('New Product');
+    expect(result).to.deep.equal(newProduct);
   });
 });
