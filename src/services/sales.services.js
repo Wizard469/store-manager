@@ -27,6 +27,24 @@ const createSaleProducts = (saleId, saleProducts) => {
 };
 
 const salesServices = {
+  getAll: async () => {
+    const result = await salesModels.getAll();
+    return { status: 200, message: result };
+  },
+
+  getById: async (Id) => {
+    const result = await salesModels.getById(Id);
+
+    if (result.length !== 0) return { status: 200, message: result };
+
+    return {
+      status: 404,
+      message: {
+        message: 'Sale not found',
+      },
+    };
+  },
+
   addNewSales: async (saleProducts) => {
     const validateId = await checkProductsIds(saleProducts);
 

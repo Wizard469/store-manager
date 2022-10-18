@@ -1,6 +1,19 @@
 const salesServices = require('../services/sales.services');
 
 const salesControllers = {
+  getAll: async (_req, res) => {
+    const { status, message } = await salesServices.getAll();
+
+    res.status(status).json(message);
+  },
+
+  getById: async (req, res) => {
+    const { id } = req.params;
+    const { status, message } = await salesServices.getById(id);
+
+    res.status(status).json(message);
+  },
+
   addSales: async (req, res) => {
     const sales = req.body;
 
